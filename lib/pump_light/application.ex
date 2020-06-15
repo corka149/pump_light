@@ -29,7 +29,8 @@ defmodule PumpLight.Application do
 
   def children(_target) do
     [
-      cowboy_plug()
+      cowboy_plug(),
+      {PumpLight, []}
     ]
   end
 
