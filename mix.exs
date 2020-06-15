@@ -42,6 +42,7 @@ defmodule PumpLight.MixProject do
       {:cowboy, "~> 2.8"},
       {:plug, "~> 1.10"},
       {:plug_cowboy, "~> 2.3"},
+      {:circuits_gpio, "~> 0.4"},
 
       # Dependencies for all targets
       {:nerves, "~> 1.6.0", runtime: false},
