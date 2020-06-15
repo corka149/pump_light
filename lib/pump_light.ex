@@ -51,18 +51,18 @@ defmodule PumpLight do
 
   defp toggle_light(gpio, "inactive", _old_state) do
     Circuits.GPIO.write(gpio, 0)
-    Logger.info("Will turn off the light")
+    Logger.debug("Will turn off the light")
     :light_off
   end
 
   defp toggle_light(gpio, "active", _old_state) do
     Circuits.GPIO.write(gpio, 1)
-    Logger.info("Will turn on the light")
+    Logger.debug("Will turn on the light")
     :light_on
   end
 
   defp toggle_light(_gpio, unkown_state, old_state) do
-    Logger.info("Unkown state '#{unkown_state}'")
+    Logger.warn("Unkown state '#{unkown_state}'")
     old_state
   end
 end

@@ -16,7 +16,7 @@ defmodule PumpLight.HttpInterface do
 
   def call(%{request_path: "/v1/device/" <> device_state} = conn, _opts) do
     [device, state] = String.split(device_state, "/")
-    Logger.info("Switch state of '#{device}' to #{state}")
+    Logger.debug("Try to switch state of '#{device}' to #{state}")
     PumpLight.switch_light(device, state)
 
     conn
