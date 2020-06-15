@@ -71,7 +71,7 @@ config :mdns_lite,
   # "nerves.local" for convenience. If more than one Nerves device is on the
   # network, delete "nerves" from the list.
 
-  host: [:hostname],
+  host: [:hostname, "pump_light_149"],
   ttl: 120,
 
   # Advertise the following services over mDNS.
@@ -100,4 +100,4 @@ config :mdns_lite,
 # of this file so it overrides the configuration defined above.
 # Uncomment to use target specific configurations
 
-# import_config "#{Mix.target()}.exs"
+import_config "#{Mix.target()}.exs"

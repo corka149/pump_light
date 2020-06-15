@@ -5,13 +5,15 @@ defmodule PumpLight do
 
   use GenServer
 
+  require Logger
+
   ### Server
 
   def init(state) do
     {:ok, state}
   end
 
-  def handle_cast({device, inc_state}, {old_light_state, gpio} = _state) do
+  def handle_cast({:switch_light, device, inc_state}, {old_light_state, gpio} = _state) do
     expected_device = device()
 
     light_state =
@@ -20,28 +22,19 @@ defmodule PumpLight do
           toggle_light(gpio, inc_state, old_light_state)
 
         _ ->
+          Logger.warn("Unkown device '#{device}'. Expected '#{expected_device}'!")
           old_light_state
       end
 
-    {light_state, gpio}
+    {:noreply, {light_state, gpio}}
   end
 
   ### Client
 
-  def start_link(state \\ {:light_off, nil}) do
-    state =
-      case state do
-        {:light_off, nil} ->
-          Circuits.GPIO.open(output_pin(), :output, initial_value: 0)
+  def start_link(_ops) do
+    {:ok, gpio} = Circuits.GPIO.open(output_pin(), :output, initial_value: 0)
 
-        {:light_on, nil} ->
-          Circuits.GPIO.open(output_pin(), :output, initial_value: 1)
-
-        state ->
-          state
-      end
-
-    GenServer.start_link(__MODULE__, {state}, name: __MODULE__)
+    GenServer.start_link(__MODULE__, {:light_off, gpio}, name: __MODULE__)
   end
 
   def switch_light(device, state) do
@@ -56,27 +49,20 @@ defmodule PumpLight do
 
   defp device, do: Application.get_env(:pump_light, :device)
 
-  defp get_states do
-    {
-      Application.get_env(:pump_light, :light_off),
-      Application.get_env(:pump_light, :light_on)
-    }
+  defp toggle_light(gpio, "inactive", _old_state) do
+    Circuits.GPIO.write(gpio, 0)
+    Logger.info("Will turn off the light")
+    :light_off
   end
 
-  defp toggle_light(gpio, inc_state, old_state) do
-    {light_off, light_on} = get_states()
+  defp toggle_light(gpio, "active", _old_state) do
+    Circuits.GPIO.write(gpio, 1)
+    Logger.info("Will turn on the light")
+    :light_on
+  end
 
-    case inc_state do
-      ^light_off ->
-        Circuits.GPIO.write(gpio, 0)
-        :light_off
-
-      ^light_on ->
-        Circuits.GPIO.write(gpio, 1)
-        :light_on
-
-      _ ->
-        old_state
-    end
+  defp toggle_light(_gpio, unkown_state, old_state) do
+    Logger.info("Unkown state '#{unkown_state}'")
+    old_state
   end
 end

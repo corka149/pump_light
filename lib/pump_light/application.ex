@@ -42,6 +42,6 @@ defmodule PumpLight.Application do
     {Plug.Cowboy,
      scheme: :http,
      plug: PumpLight.HttpInterface,
-     options: [port: Application.get_env(:pump_light, :port, 4000)]}
+     options: [port: 4000]}
   end
 end
