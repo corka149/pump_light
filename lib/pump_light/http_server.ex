@@ -1,4 +1,7 @@
 defmodule PumpLight.HttpInterface do
+  @moduledoc """
+  Interface for the pond pump device
+  """
   import Plug.Conn
 
   require Logger
@@ -13,6 +16,7 @@ defmodule PumpLight.HttpInterface do
 
   def call(%{request_path: "/v1/device/" <> device_state} = conn, _opts) do
     [device, state] = String.split(device_state, "/")
+    PumpLight.switch_light(device, state)
 
     conn
     |> put_resp_content_type("text/plain")

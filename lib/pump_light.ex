@@ -1,4 +1,8 @@
 defmodule PumpLight do
+  @moduledoc """
+  Handles the switching of the light
+  """
+
   use GenServer
 
   ### Server
