@@ -48,7 +48,7 @@ config :vintage_net,
        type: VintageNetEthernet,
        ipv4: %{method: :dhcp}
      }},
-     {"wlan0",
+    {"wlan0",
      %{
        type: VintageNetWiFi,
        vintage_net_wifi: %{
@@ -56,13 +56,12 @@ config :vintage_net,
            %{
              key_mgmt: :wpa_psk,
              ssid: System.fetch_env!("WLAN_SSID"),
-             psk: System.fetch_env!("WLAN_PASSWORD"),
+             psk: System.fetch_env!("WLAN_PASSWORD")
            }
          ]
        },
-       ipv4: %{method: :dhcp},
-     }
-   }
+       ipv4: %{method: :dhcp}
+     }}
   ]
 
 config :mdns_lite,

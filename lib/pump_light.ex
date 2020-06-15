@@ -14,12 +14,14 @@ defmodule PumpLight do
   def handle_cast({device, inc_state}, {old_light_state, gpio} = _state) do
     expected_device = device()
 
-    light_state = case device do
-      ^expected_device ->
-        toggle_light(gpio, inc_state, old_light_state)
-      _ ->
-        old_light_state
-    end
+    light_state =
+      case device do
+        ^expected_device ->
+          toggle_light(gpio, inc_state, old_light_state)
+
+        _ ->
+          old_light_state
+      end
 
     {light_state, gpio}
   end
@@ -27,14 +29,17 @@ defmodule PumpLight do
   ### Client
 
   def start_link(state \\ {:light_off, nil}) do
-    state = case state do
-      {:light_off, nil} ->
-        Circuits.GPIO.open(output_pin(), :output, initial_value: 0)
-      {:light_on, nil} ->
-        Circuits.GPIO.open(output_pin(), :output, initial_value: 1)
-      state ->
-        state
-    end
+    state =
+      case state do
+        {:light_off, nil} ->
+          Circuits.GPIO.open(output_pin(), :output, initial_value: 0)
+
+        {:light_on, nil} ->
+          Circuits.GPIO.open(output_pin(), :output, initial_value: 1)
+
+        state ->
+          state
+      end
 
     GenServer.start_link(__MODULE__, {state}, name: __MODULE__)
   end
@@ -65,9 +70,11 @@ defmodule PumpLight do
       ^light_off ->
         Circuits.GPIO.write(gpio, 0)
         :light_off
+
       ^light_on ->
         Circuits.GPIO.write(gpio, 1)
         :light_on
+
       _ ->
         old_state
     end
