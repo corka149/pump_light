@@ -23,14 +23,16 @@ defmodule PumpLight.Application do
   # List all child processes to be supervised
   def children(:host) do
     [
-      cowboy_plug()
+      cowboy_plug(),
+      {PumpLight.LightBuoy, []}
     ]
   end
 
   def children(_target) do
     [
       cowboy_plug(),
-      {PumpLight, []}
+      {PumpLight, []},
+      {PumpLight.LightBuoy, []}
     ]
   end
 
