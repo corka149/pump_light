@@ -1,21 +1,10 @@
 # pump_light
 
-Firmware for a device that turn off/on signal lights.
+"Firmware" for a device that turn off/on signal lights.
 
-## Build
+## Setup
 
-Insert a SD card and run the following steps:
-  * `export MIX_TARGET=rpi0`
-  * `export WLAN_SSID=******`
-  * `export WLAN_PASSWORD=******`
-  * `mix firmware`
-  * `mix firmware.burn`
-
-## Config
-
-Change rpi0.exs:
-```elixir
-config :pump_light,
-  device: "pond_pump_149",
-  light_pin: 18
+```shell
+# 1. Install project
+python3 -m pip install .
 ```
