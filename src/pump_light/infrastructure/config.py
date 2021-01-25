@@ -9,13 +9,13 @@ from typing import Dict, Any
 
 import yaml
 
-_config_yaml: Dict[str, Any]
-_log = logging.getLogger(__name__)
+_CONFIG_YAML: Dict[str, Any]
+_LOG = logging.getLogger(__name__)
 
 
 def init(profile: str):
     """ Init config file from path. """
-    global _config_yaml
+    global _CONFIG_YAML
 
     config_path = os.path.abspath(os.path.dirname(__file__))
     config_path = os.path.join(
@@ -24,10 +24,10 @@ def init(profile: str):
     yaml_path = Path(config_path)
     if yaml_path.exists():
         with yaml_path.open('r') as yaml_file:
-            _config_yaml = yaml.load(yaml_file, Loader=yaml.Loader)
+            _CONFIG_YAML = yaml.load(yaml_file, Loader=yaml.Loader)
     else:
-        _config_yaml = dict()
-        _log.debug('No "%s" found.', config_path)
+        _CONFIG_YAML = dict()
+        _LOG.debug('No "%s" found.', config_path)
 
 
 def get_config(name: str):
@@ -64,7 +64,7 @@ def get_config(name: str):
 
     # 2. Check config file
     keys = name.split('.')
-    val = _config_yaml
+    val = _CONFIG_YAML
     for k in keys:
         if isinstance(val, dict):
             val = val.get(k, {})

@@ -3,6 +3,7 @@ import asyncio
 import logging
 import os
 
+from pump_light import client, light_controller
 from pump_light.infrastructure import config
 
 
@@ -20,7 +21,16 @@ async def main():
 
 
 async def observe_and_shine():
-    pass
+    """ Waits for incoming message and checks if it should turn on the light. """
+    event_handler = light_controller.switch_light
+
+    while True:
+        try:
+            await client.react(event_handler)
+        except Exception as ex:
+            await client.send_exception(ex)
+            # Throttle down
+            await asyncio.sleep(10)
 
 
 asyncio.get_event_loop().run_until_complete(main())
