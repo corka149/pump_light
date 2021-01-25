@@ -1,0 +1,12 @@
+iot_server:
+  address: http://localhost:8000
+
+security:
+  basic:
+    username: iot
+    password: passwd
+
+device:
+  name: pump_light
+  place: garden
+  description: observers pump activities

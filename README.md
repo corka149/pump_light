@@ -1,4 +1,4 @@
-# PumpLight
+# pump_light
 
 Firmware for a device that turn off/on signal lights.
 
