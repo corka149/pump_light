@@ -25,12 +25,13 @@ async def react(event_handler: Callable[[MessageDTO], None]):
         async with session.ws_connect(url) as websocket:
             _LOG.info('Connected')
             async for msg in websocket:
-                msg: WSMessage = msg
-                if msg.type == aiohttp.WSMsgType.TEXT:
-                    _LOG.debug('%s: Server sent "%s"', datetime.now(), msg.data)
-                    message = MessageDTO(**msg.json())
+                # noinspection PyTypeChecker
+                ws_msg: WSMessage = msg
+                if ws_msg.type == aiohttp.WSMsgType.TEXT:
+                    _LOG.debug('%s: Server sent "%s"', datetime.now(), ws_msg.data)
+                    message = MessageDTO(**ws_msg.json())
                     event_handler(message)
-                elif msg.type == aiohttp.WSMsgType.ERROR:
+                elif ws_msg.type == aiohttp.WSMsgType.ERROR:
                     err = str(msg)
                     _LOG.error('ERROR: "%s"', err)
                     raise ValueError(err)
