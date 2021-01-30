@@ -25,12 +25,15 @@ async def observe_and_shine():
     event_handler = light_controller.switch_light
 
     while True:
-        try:
-            await client.react(event_handler)
-        except Exception as ex:
-            await client.send_exception(ex)
-            # Throttle down
-            await asyncio.sleep(10)
+        exists = await client.check_existence()
+
+        if exists:
+            try:
+                await client.react(event_handler)
+            except Exception as ex:
+                await client.send_exception(ex)
+        # Throttle down
+        await asyncio.sleep(20)
 
 
 asyncio.get_event_loop().run_until_complete(main())
