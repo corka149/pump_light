@@ -3,7 +3,7 @@ import base64
 import logging
 import socket
 from datetime import datetime
-from typing import Callable, Tuple, Dict
+from typing import Callable, Dict
 
 import aiohttp
 from aiohttp import ClientSession, WSMessage
