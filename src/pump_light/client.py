@@ -21,7 +21,7 @@ async def react(event_handler: Callable[[MessageDTO], None]):
     url = __build_device_url() + '/exchange'
 
     async with ClientSession() as session:
-        async with session.ws_connect(url, headers=__basic_auth(), heartbeat=5) as websocket:
+        async with session.ws_connect(url, headers=__basic_auth()) as websocket:
             _LOG.info('Connected')
             async for msg in websocket:
                 # noinspection PyTypeChecker
