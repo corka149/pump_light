@@ -55,7 +55,7 @@ async def send_exception(exception: Exception) -> None:
             _LOG.info('Response on error report: status=%s, message="%s"', response.status, msg)
 
 
-def check_existence():
+async def check_existence():
     """ Checks if a device exists. """
     async with ClientSession() as session:
         async with session.get(__build_device_url(), headers=__basic_auth()) as response:
