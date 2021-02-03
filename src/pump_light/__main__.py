@@ -6,14 +6,16 @@ import os
 from pump_light import client, light_controller
 from pump_light.infrastructure import config
 
+_LOG = logging.getLogger('pump_light')
+
 
 async def main():
     """ Main that tires all logic together. """
-    logger = logging.getLogger('pump_light')
+    logging.basicConfig(level=logging.INFO)
 
     # Preparing config
     profile = os.getenv('IOT_SERVER_PROFILE', 'dev')
-    logger.info('PROFILE: %s', profile)
+    _LOG.info('PROFILE: %s', profile)
     config.init(profile)
 
     # Observes the device
@@ -34,6 +36,7 @@ async def observe_and_shine():
             if exists:
                 await client.react(event_handler)
         except Exception as ex:
+            _LOG.exception('Error while report', exc_info=ex)
             await client.send_exception(ex)
 
 

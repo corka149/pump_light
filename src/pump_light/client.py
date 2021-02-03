@@ -28,8 +28,13 @@ async def react(event_handler: Callable[[MessageDTO], None]):
                 ws_msg: WSMessage = msg
                 if ws_msg.type == aiohttp.WSMsgType.TEXT:
                     _LOG.debug('%s: Server sent "%s"', datetime.now(), ws_msg.data)
-                    message = MessageDTO(**ws_msg.json())
-                    event_handler(message)
+
+                    json_response = ws_msg.json()
+                    if 'access_id' not in json_response:
+                        message = MessageDTO(**json_response)
+                        event_handler(message)
+                    elif isinstance(json_response, dict):
+                        _LOG.info(f'Got id {json_response.get("access_id")}')
                 elif ws_msg.type == aiohttp.WSMsgType.ERROR:
                     err = str(msg)
                     _LOG.error('ERROR: "%s"', err)
@@ -47,7 +52,7 @@ async def send_exception(exception: Exception) -> None:
             hostname=socket.gethostname(),
             clazz=exception.__class__.__name__,
             message='Exception on listener side',
-            description=str(exception)
+            stacktrace=str(exception)
         )
 
         async with session.post(url, data=exception_dto.json(), headers=__basic_auth()) as response:
