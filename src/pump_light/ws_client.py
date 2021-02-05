@@ -13,11 +13,13 @@ from pump_light.model.message import MessageDTO
 
 _LOG = logging.getLogger(__name__)
 
+WebsocketHandler = Dict[int, Callable[[ClientWebSocketResponse, WSMessage], Coroutine[None, None, None]]]
+
 
 async def react(event_handler: Callable[[MessageDTO], None]):
     """ Waits for incoming WS message and applies event handler on them. """
     url = config.build_device_url() + '/exchange'
-    handler = __build_handler(text_handler=event_handler)
+    handler: WebsocketHandler = __build_handler(text_handler=event_handler)
 
     async with ClientSession() as session:
         async with session.ws_connect(url, headers=config.basic_auth()) as websocket:
@@ -36,9 +38,7 @@ async def react(event_handler: Callable[[MessageDTO], None]):
 
 
 # noinspection PyTypeChecker
-def __build_handler(
-        text_handler: Callable[[MessageDTO], None]
-) -> Dict[int, Callable[[ClientWebSocketResponse, WSMessage], Coroutine[None, None, None]]]:
+def __build_handler(text_handler: Callable[[MessageDTO], None]) -> WebsocketHandler:
     handler = defaultdict(__handle_message_default)
     handler[aiohttp.WSMsgType.TEXT] = __build_handle_text_message(text_handler)
     handler[aiohttp.WSMsgType.ERROR] = __handle_end_message
