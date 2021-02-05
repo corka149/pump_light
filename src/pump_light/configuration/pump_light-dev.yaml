@@ -12,6 +12,7 @@ device:
   name: pump_light_149
   place: garden
   description: shows pump activities
+  light_pin: 17
 
 observed_device:
   name: pond_pump_149

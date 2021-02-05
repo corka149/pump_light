@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Dict, Any
 
 import yaml
+from gpiozero import LED, Device
+from gpiozero.pins.mock import MockFactory
 
 _CONFIG_YAML: Dict[str, Any]
 _LOG = logging.getLogger(__name__)
@@ -31,7 +33,7 @@ def init(profile: str):
         _LOG.debug('No "%s" found.', config_path)
 
 
-def get_config(name: str):
+def get_config(name: str, is_optional=False):
     """
     Checks first the environment variable for a config.
     When it is not available it will look for it in the
@@ -70,7 +72,7 @@ def get_config(name: str):
         if isinstance(val, dict):
             val = val.get(k, {})
 
-    if val:
+    if val or is_optional:
         return val
     raise ValueError(f'"{name} not found')
 
@@ -88,3 +90,14 @@ def basic_auth() -> Dict[str, str]:
     passwd = get_config('security.basic.password')
     b64 = base64.b64encode(bytes(f'{username}:{passwd}', 'ascii'))
     return {'Authorization': f'Basic {b64.decode("ascii")}'}
+
+
+def build_led() -> LED:
+    """ Builds the LED for showing activities """
+    is_dev = get_config('dev_mode')
+
+    if is_dev:
+        Device.pin_factory = MockFactory()
+
+    led_pin = get_config('device.light_pin')
+    return LED(led_pin)

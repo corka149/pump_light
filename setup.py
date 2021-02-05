@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'pydantic',
         'PyYAML',
-        'aiohttp'
+        'aiohttp',
+        'gpiozero'
     ]
 )

@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import os
+from functools import partial
 
 from pump_light import client, light_controller, ws_client
 from pump_light.infrastructure import config
@@ -24,7 +25,8 @@ async def main():
 
 async def observe_and_shine():
     """ Waits for incoming message and checks if it should turn on the light. """
-    event_handler = light_controller.switch_light
+    led = config.build_led()
+    event_handler = partial(light_controller.switch_light, led=led)
 
     while True:
         try:
