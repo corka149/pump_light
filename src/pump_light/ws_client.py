@@ -30,6 +30,11 @@ async def react(event_handler: Callable[[MessageDTO], None]):
     raise EndedTooEarlyException('Listener finished which should never happen.')
 
 
+# ===== ===== ===== ======= ===== ===== =====
+# ===== ===== ===== HANDLER ===== ===== =====
+# ===== ===== ===== ======= ===== ===== =====
+
+
 # noinspection PyTypeChecker
 def __build_handler(
         text_handler: Callable[[MessageDTO], None]
