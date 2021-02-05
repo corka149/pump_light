@@ -13,6 +13,5 @@ device:
   place: garden
   description: shows pump activities
 
-observers:
-  device:
-    name: pond_pump_149
+observed_device:
+  name: pond_pump_149

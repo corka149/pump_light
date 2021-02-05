@@ -3,7 +3,7 @@ import asyncio
 import logging
 import os
 
-from pump_light import client, light_controller
+from pump_light import client, light_controller, ws_client
 from pump_light.infrastructure import config
 
 _LOG = logging.getLogger('pump_light')
@@ -34,7 +34,7 @@ async def observe_and_shine():
             exists = await client.check_existence()
 
             if exists:
-                await client.react(event_handler)
+                await ws_client.react(event_handler)
         except Exception as ex:
             _LOG.exception('Error while report', exc_info=ex)
             await client.send_exception(ex)
