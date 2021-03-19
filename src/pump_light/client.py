@@ -28,6 +28,8 @@ class ExceptionReporter:
                 stacktrace=''.join(stack)
             )
             await send_exception(exception_dto)
+            # Exception was handled
+            return True
 
 
 async def send_exception(exception_dto: ExceptionSubmittal) -> None:
