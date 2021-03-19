@@ -5,6 +5,7 @@ import os
 from functools import partial
 
 from pump_light import client, light_controller, ws_client
+from pump_light.client import ExceptionReporter
 from pump_light.infrastructure import config
 
 _LOG = logging.getLogger('pump_light')
@@ -27,9 +28,10 @@ async def observe_and_shine():
     """ Waits for incoming message and checks if it should turn on the light. """
     led = config.build_led()
     event_handler = partial(light_controller.switch_light, led=led)
+    exc_reporter = ExceptionReporter()
 
     while True:
-        try:
+        async with exc_reporter:
             # Throttle down
             await asyncio.sleep(20)
 
@@ -37,9 +39,6 @@ async def observe_and_shine():
 
             if exists:
                 await ws_client.react(event_handler)
-        except Exception as ex:
-            _LOG.exception('Error while report', exc_info=ex)
-            await client.send_exception(ex)
 
 
 asyncio.get_event_loop().run_until_complete(main())
