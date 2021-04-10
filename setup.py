@@ -2,9 +2,10 @@ from setuptools import setup
 
 setup(
     name='pump_light',
-    version='0.0.1',
+    version='1.0.0',
     packages=['pump_light'],
     package_dir={'': 'src'},
+    include_package_data=True,  # IMPORTANT for configs in combination with MANIFEST.in
     url='https://github.com/corka149/pump_light',
     license='',
     author='corka149',

@@ -1,0 +1,17 @@
+# Copy it to /etc/systemd/system
+# https://www.freedesktop.org/software/systemd/man/systemd.service.html
+[Unit]
+Description=IOT light for a pump
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi
+ExecStart=python3 -m pump_light
+EnvironmentFile=/home/pi/pump_light.env
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
