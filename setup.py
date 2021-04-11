@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pump_light',
-    version='1.0.1',
+    version='1.0.2',
     packages=['pump_light'],
     package_dir={'': 'src'},
     include_package_data=True,  # IMPORTANT for configs in combination with MANIFEST.in
@@ -15,6 +15,7 @@ setup(
         'pydantic',
         'PyYAML',
         'aiohttp',
-        'gpiozero'
+        'gpiozero',
+        'RPi.GPIO'
     ]
 )
