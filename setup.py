@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
     name='pump_light',
-    version='1.0.4',
-    packages=['pump_light'],
+    version='1.0.5',
+    packages=['pump_light', 'pump_light.infrastructure', 'pump_light.model'],
     package_dir={'': 'src'},
     include_package_data=True,  # IMPORTANT for configs in combination with MANIFEST.in
     url='https://github.com/corka149/pump_light',
