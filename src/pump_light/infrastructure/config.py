@@ -5,6 +5,7 @@ Config module that tries to fetch the matching config for given profile
 import base64
 import logging
 import os
+import pprint
 from pathlib import Path
 from typing import Dict, Any
 
@@ -72,9 +73,13 @@ def get_config(name: str, is_optional=False):
         if isinstance(val, dict):
             val = val.get(k, {})
 
-    if val or is_optional:
+    if val or is_optional or isinstance(val, bool):
         return val
-    raise ValueError(f'"{name} not found')
+
+    msg = f'"{name}" not found'
+    _LOG.error(msg)
+    _LOG.info('Has configs: %s', pprint.pformat(_CONFIG_YAML))
+    raise ValueError(msg)
 
 
 def build_device_url() -> str:

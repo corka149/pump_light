@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pump_light',
-    version='1.0.0',
+    version='1.0.1',
     packages=['pump_light'],
     package_dir={'': 'src'},
     include_package_data=True,  # IMPORTANT for configs in combination with MANIFEST.in
