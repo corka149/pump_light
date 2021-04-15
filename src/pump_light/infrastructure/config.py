@@ -102,6 +102,7 @@ def build_led() -> LED:
     is_dev = get_config('dev_mode')
 
     if is_dev:
+        _LOG.info('dev mode active')
         Device.pin_factory = MockFactory()
 
     led_pin = get_config('device.light_pin')
